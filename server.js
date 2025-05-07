@@ -11,7 +11,6 @@ const receipts = new Map()
 // POST /receipts/process
 app.post('/receipts/process', (req, res) => {
 
-    
   try {
 
     const receipt = req.body
