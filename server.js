@@ -1,6 +1,6 @@
 import express from 'express'
 import { v4 as uuidv4 } from 'uuid'
-// import { validateReceipt } from './schemas/receipt.js'
+
 
 const app = express()
 app.use(express.json())
@@ -20,7 +20,6 @@ app.post('/receipts/process', (req, res) => {
 
     const id = uuidv4()
     receipts.set(id, receipt)
-    console.log(receipt)
     res.json({ id })
 
   } catch (error) {
@@ -32,12 +31,7 @@ app.post('/receipts/process', (req, res) => {
 app.get('/receipts/:id/points', (req, res) => {
   try {
     const { id } = req.params
-    const receipt = receipts.get(id)
-    if (!receipt) {
-      return res.status(404).json({ error: 'No receipt found for that ID.' })
-    }
-    
-    const points = calculatePoints(receipt)
+    const points = calculatePoints(id)
     res.json({ points })
   } catch (error) {
     res.status(404).json({ error: 'No receipt found for that ID.' })
@@ -46,11 +40,63 @@ app.get('/receipts/:id/points', (req, res) => {
 
 
 function validateReceipt(receipt) {
+  // Check if all required fields exist
+  if (!receipt.retailer || !receipt.purchaseDate || !receipt.purchaseTime || !receipt.items || !receipt.total) {
+    return false;
+  }
+
+  // Validate retailer (alphanumeric, spaces, hyphens, and & only)
+  if (!/^[\w\s\-&]+$/.test(receipt.retailer)) {
+    return false;
+  }
+
+  // Validate purchaseDate (YYYY-MM-DD format)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(receipt.purchaseDate)) {
+    return false;
+  }
+
+  // Validate purchaseTime (HH:MM format, 24-hour)
+  if (!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(receipt.purchaseTime)) {
+    return false;
+  }
+
+  // Validate items array
+  if (!Array.isArray(receipt.items) || receipt.items.length === 0) {
+    return false;
+  }
+
+  // Validate each item
+  for (const item of receipt.items) {
+    if (!item.shortDescription || !item.price) {
+      return false;
+    }
+
+    // Validate shortDescription (alphanumeric, spaces, and hyphens only)
+    if (!/^[\w\s\-]+$/.test(item.shortDescription)) {
+      return false;
+    }
+
+    // Validate price (format: XX.XX)
+    if (!/^\d+\.\d{2}$/.test(item.price)) {
+      return false;
+    }
+  }
+
+  // Validate total (format: XX.XX)
+  if (!/^\d+\.\d{2}$/.test(receipt.total)) {
+    return false;
+  }
+
   return true;
 }
 
 // Calculate points based on receipt rules
-function calculatePoints(receipt) {
+function calculatePoints(id) {
+  const receipt = receipts.get(id)
+  if (!receipt) {
+    throw new Error('No receipt found for that ID.')
+  }
+
   let points = 0
   
   // Rule 1: One point for every alphanumeric character in the retailer name
