@@ -48,11 +48,12 @@ app.get('/receipts/:id/points', (req, res) => {
 // Export app for testing
 export default app;
 
-// Only start the server if this file is run directly
-if (process.argv[1] === import.meta.url) {
+// Start the server if not being imported for testing
+if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'test') {
   const PORT = 3000
-  const server = app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  const HOST = '0.0.0.0'  // Bind to all network interfaces
+  const server = app.listen(PORT, HOST, () => {
+    console.log(`Server is running on http://${HOST}:${PORT}`);
     console.log('Available endpoints:');
     console.log('  GET  /');
     console.log('  POST /receipts/process');

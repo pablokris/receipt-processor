@@ -1,18 +1,23 @@
 # Use an official Node.js image
-FROM node:20-slim
+FROM node:20-alpine
 
 # Create and set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy package files
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the app
+# Copy application files
 COPY . .
 
-# Expose port
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Run the app
-CMD ["node", "server.js"]
+# Set environment variables
+ENV NODE_ENV=development
+
+# Command to run the application
+CMD ["npm", "start"]

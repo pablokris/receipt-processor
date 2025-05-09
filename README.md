@@ -1,6 +1,6 @@
 # Receipt Processor API
 
-A RESTful API service that processes receipts and calculates reward points based on specific rules.
+A RESTful API service that processes receipts and calculates reward points based on specific rules. This application is containerized with Docker for easy deployment and consistent development experience.
 
 ## Features
 
@@ -8,45 +8,54 @@ A RESTful API service that processes receipts and calculates reward points based
 - Calculate reward points based on receipt details
 - RESTful API endpoints
 - Comprehensive test suite
+- Docker support for easy deployment and testing
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
-- npm (Node Package Manager)
+- Docker
 
-## Installation
+## Quick Start with Docker
 
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/pablokris/receipt-processor.git
 cd receipt-processor
 ```
 
-2. Install dependencies:
+2. Build and run the application:
 
 ```bash
-npm install
+# Build the Docker image
+docker build -t receipt-processor .
+
+# Run the container (interactive mode with automatic cleanup)
+docker run -it --rm -p 3000:3000 receipt-processor
 ```
 
-## Running the Application
+The API will be available at http://localhost:3000
 
-### Development Mode
-
-To start the server in development mode:
+### Docker Commands Reference
 
 ```bash
-node server.js
-```
+# Build the image
+docker build -t receipt-processor .
 
-The server will start on http://localhost:3000
+# Run in foreground (recommended for development)
+docker run -it --rm -p 3000:3000 receipt-processor
 
-### Running Tests
+# Run in background
+docker run -d --name receipt-app -p 3000:3000 receipt-processor
 
-To run the test suite:
+# View logs (for background container)
+docker logs -f receipt-app
 
-```bash
-npm test
+# Stop and remove background container
+docker stop receipt-app
+docker rm receipt-app
+
+# Run tests
+docker run --rm receipt-processor npm test
 ```
 
 ## API Endpoints
@@ -93,9 +102,7 @@ Points are awarded based on the following rules:
 6. 6 points if the day in the purchase date is odd
 7. 10 points if the time of purchase is after 2:00pm and before 4:00pm
 
-## Development
-
-### Project Structure
+## Project Structure
 
 ```
 receipt-processor/
@@ -104,33 +111,16 @@ receipt-processor/
 │   ├── calculate-points.js  # Points calculation logic
 │   └── validate-receipt.js  # Receipt validation logic
 ├── server.test.js      # Test suite
+├── Dockerfile          # Docker configuration
 └── package.json        # Project dependencies
 ```
 
-### Stopping the Server
-
-To stop the server:
-
-1. If running in the foreground, press `Ctrl + C` (or `Cmd + C` on Mac)
-2. If running in the background, find the process ID and kill it:
-   ```bash
-   lsof -i :3000
-   kill <PID>
-   ```
-
 ## Testing
 
-The project uses Jest for testing. Tests cover:
-
-- Receipt validation
-- Points calculation
-- API endpoints
-- Error handling
-
-Run the test suite with:
+Run the test suite in a Docker container:
 
 ```bash
-npm test
+docker run --rm receipt-processor npm test
 ```
 
 ## Error Handling
@@ -141,3 +131,28 @@ The API returns appropriate HTTP status codes:
 - 400: Invalid receipt format
 - 404: Receipt not found
 - 500: Server error
+
+## Environment Variables
+
+The application respects the following environment variables:
+
+- `NODE_ENV`: Set to 'test' when running tests
+- Default port is 3000
+
+## Alternative: Local Development
+
+If you prefer to run the application without Docker, you'll need:
+
+- Node.js (v14 or higher)
+- npm (Node Package Manager)
+
+```bash
+# Install dependencies
+npm install
+
+# Start the server
+npm start
+
+# Run tests
+npm test
+```
