@@ -7,7 +7,7 @@ A RESTful API service that processes receipts and calculates reward points based
 - Process receipts with validation
 - Calculate reward points based on receipt details
 - RESTful API endpoints
-- Comprehensive test suite
+- Comprehensive test suite with isolated test environment
 - Docker support for easy deployment and testing
 
 ## Prerequisites
@@ -54,8 +54,8 @@ docker logs -f receipt-app
 docker stop receipt-app
 docker rm receipt-app
 
-# Run tests
-docker run --rm receipt-processor npm test
+# Run tests (with test environment)
+docker run --rm -e NODE_ENV=test receipt-processor npm test
 ```
 
 ## API Endpoints
@@ -117,11 +117,20 @@ receipt-processor/
 
 ## Testing
 
-Run the test suite in a Docker container:
+The application uses Jest for testing and includes a comprehensive test suite. Tests run in an isolated environment to avoid conflicts with the main server:
 
 ```bash
-docker run --rm receipt-processor npm test
+# Run tests in Docker with proper environment
+docker run --rm -e NODE_ENV=test receipt-processor npm test
 ```
+
+Key testing features:
+
+- Isolated test environment (uses port 3001 for test server)
+- Automatic test server cleanup
+- Comprehensive API endpoint testing
+- Input validation tests
+- Points calculation verification
 
 ## Error Handling
 
@@ -136,8 +145,11 @@ The API returns appropriate HTTP status codes:
 
 The application respects the following environment variables:
 
-- `NODE_ENV`: Set to 'test' when running tests
-- Default port is 3000
+- `NODE_ENV`:
+  - Set to 'test' when running tests (prevents main server from starting)
+  - Any other value or unset will start the main server
+- `PORT`: Default is 3000 (main server)
+- Test server runs on port 3001 to avoid conflicts
 
 ## Alternative: Local Development
 
@@ -154,5 +166,5 @@ npm install
 npm start
 
 # Run tests
-npm test
+NODE_ENV=test npm test
 ```

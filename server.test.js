@@ -11,7 +11,7 @@ import app from './server.js';
 let server;
 
 beforeAll(() => {
-  server = app.listen(3000);
+  server = app.listen(3001);
 });
 
 afterAll((done) => {

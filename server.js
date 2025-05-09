@@ -49,7 +49,7 @@ app.get('/receipts/:id/points', (req, res) => {
 export default app;
 
 // Start the server if not being imported for testing
-if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   const PORT = 3000
   const HOST = '0.0.0.0'  // Bind to all network interfaces
   const server = app.listen(PORT, HOST, () => {
