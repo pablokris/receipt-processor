@@ -48,22 +48,24 @@ app.get('/receipts/:id/points', (req, res) => {
 // Export app for testing
 export default app;
 
-// Start the server
-const PORT = 3000
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log('Available endpoints:');
-  console.log('  GET  /');
-  console.log('  POST /receipts/process');
-  console.log('  GET  /receipts/:id/points');
-});
+// Only start the server if this file is run directly
+if (process.argv[1] === import.meta.url) {
+  const PORT = 3000
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log('Available endpoints:');
+    console.log('  GET  /');
+    console.log('  POST /receipts/process');
+    console.log('  GET  /receipts/:id/points');
+  });
 
-// Handle server errors
-server.on('error', (error) => {
-  if (error.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use. Please try a different port.`);
-  } else {
-    console.error('Server error:', error);
-  }
-  process.exit(1);
-});
+  // Handle server errors
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. Please try a different port.`);
+    } else {
+      console.error('Server error:', error);
+    }
+    process.exit(1);
+  });
+}
