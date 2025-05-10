@@ -1,11 +1,6 @@
 import { receipts } from './store.js';
 
-export function calculatePoints(id) {
-    const receipt = receipts.get(id);
-    if (!receipt) {
-      throw new Error('No receipt found for that ID.');
-    }
-  
+export function calculatePoints(receipt) {
     let points = 0
     
     // Rule 1: One point for every alphanumeric character in the retailer name
