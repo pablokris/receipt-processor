@@ -1,12 +1,11 @@
 import express from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { calculatePoints, receipts } from './utils/calculate-points.js'
+import { calculatePoints } from './utils/calculate-points.js'
 import { validateReceipt } from './utils/validate-receipt.js'
-
+import { receipts } from './utils/store.js'
 
 const app = express()
 app.use(express.json())
-
 
 // Add a test route
 app.get('/', (req, res) => {
@@ -26,6 +25,7 @@ app.post('/receipts/process', (req, res) => {
     const id = uuidv4()
     receipts.set(id, receipt)
     console.log('Receipt processed with ID:', id);
+    console.log('Receipts:', JSON.stringify(receipts, null, 2));
     res.json({ id })
   } catch (error) {
     console.error('Error processing receipt:', error);

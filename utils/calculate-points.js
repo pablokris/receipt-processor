@@ -1,4 +1,4 @@
-const receipts = new Map();
+import { receipts } from './store.js';
 
 export function calculatePoints(id) {
     const receipt = receipts.get(id);
@@ -47,6 +47,3 @@ export function calculatePoints(id) {
     
     return points
   }
-  
-// Export the receipts map for use in the server
-export { receipts };
