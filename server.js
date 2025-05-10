@@ -18,12 +18,14 @@ app.post('/receipts/process', (req, res) => {
     const receipt = req.body
     if(!validateReceipt(receipt)) {
       console.log('Invalid receipt:', receipt);
+      // TODO: log  invalid receipts into a file or store & include a more detailed error message  
       return res.status(400).json({ error: 'Please verify input.' })
     }
 
     const id = addReceipt(receipt)
     console.log('Receipt processed with ID:', id);
     res.json({ id })
+    
   } catch (error) {
     console.error('Error processing receipt:', error);
     res.status(400).json({ error: 'Please verify input.' })
@@ -54,10 +56,6 @@ if (process.env.NODE_ENV !== 'test') {
   const HOST = '0.0.0.0'  // Bind to all network interfaces
   const server = app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}`);
-    console.log('Available endpoints:');
-    console.log('  GET  /');
-    console.log('  POST /receipts/process');
-    console.log('  GET  /receipts/:id/points');
   });
 
   // Handle server errors
