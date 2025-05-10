@@ -1,4 +1,5 @@
-export function validateReceipt(receipt) {
+
+function validateReceipt(receipt) {
     // Check if all required fields exist
     if (!receipt.retailer || !receipt.purchaseDate || !receipt.purchaseTime || !receipt.items || !receipt.total) {
       return false;
@@ -48,3 +49,5 @@ export function validateReceipt(receipt) {
   
     return true;
   }
+  
+  export { validateReceipt };

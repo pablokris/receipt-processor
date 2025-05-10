@@ -3,8 +3,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { calculatePoints, receipts } from './utils/calculate-points.js'
 import { validateReceipt } from './utils/validate-receipt.js'
 
+
 const app = express()
 app.use(express.json())
+
 
 // Add a test route
 app.get('/', (req, res) => {

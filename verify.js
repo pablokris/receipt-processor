@@ -51,7 +51,7 @@ const response = await fetch('http://localhost:3000/receipts/process', {
     headers: {
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify(testReceipt2)
+    body: JSON.stringify(testReceipt)
 });
 
 // Read and log the response body

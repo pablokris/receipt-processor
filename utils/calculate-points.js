@@ -1,18 +1,9 @@
-// In-memory storage for receipts
 const receipts = new Map();
 
-export function calculatePoints(idOrReceipt) {
-    let receipt;
-    
-    // If idOrReceipt is a string, treat it as an ID and look up the receipt
-    if (typeof idOrReceipt === 'string') {
-      receipt = receipts.get(idOrReceipt);
-      if (!receipt) {
-        throw new Error('No receipt found for that ID.');
-      }
-    } else {
-      // Otherwise, treat it as a receipt object
-      receipt = idOrReceipt;
+export function calculatePoints(id) {
+    const receipt = receipts.get(id);
+    if (!receipt) {
+      throw new Error('No receipt found for that ID.');
     }
   
     let points = 0
