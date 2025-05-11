@@ -1,13 +1,11 @@
 # Receipt Processor API
 
-The following is my submission for the receipt processor challenge. The submission is a RESTful API service that processes retail receipts and calculates reward points based on specific rules. This application is built with:
+The following is my submission for the [Fetch Rewards Receipt Processor Challenge](https://github.com/fetch-rewards/receipt-processor-challenge). The submission is a RESTful API service that processes retail receipts and calculates reward points based on specific requirements found in the challenge repository. This application was built with:
 
 - Node.js
 - Express.js
 - Jest for testing
 - Docker for containerization
-
-As specififed in the requirements, since this is not authored in Golang, the application is containerized with Docker.
 
 ## Prerequisites
 
@@ -34,39 +32,9 @@ docker run -it --rm -p 3000:3000 receipt-processor
 
 The API will be available at http://localhost:3000
 
-### Docker Commands Reference
-
-```bash
-# Build the image (includes running tests)
-# The build will fail if any tests don't pass
-docker build -t receipt-processor .
-
-# Verify the image was built
-docker images | grep receipt-processor
-
-# Check image details
-docker inspect receipt-processor
-
-# Run in foreground (recommended for development)
-docker run -it --rm -p 3000:3000 receipt-processor
-
-# Run in background
-docker run -d --name receipt-app -p 3000:3000 receipt-processor
-
-# View logs (for background container)
-docker logs -f receipt-app
-
-# Stop and remove background container
-docker stop receipt-app
-docker rm receipt-app
-
-# Run tests separately (if needed)
-docker run --rm -e NODE_ENV=test receipt-processor npm test
-```
-
 ### Build Process
 
-During the build, all test are run automatically, if any of the test fail, the build process will stop and fail
+During the docker build, all test are run automatically, if any of the test fail, the build process will stop and fail
 
 ## API Endpoints
 
@@ -98,30 +66,18 @@ docker run --rm -e NODE_ENV=test receipt-processor npm test
 
 Key testing features:
 
-- Isolated test environment (uses port 3001 for test server)
-- Automatic test server cleanup
-- Comprehensive API endpoint testing
+- API endpoint testing
 - Input validation tests
 - Points calculation verification
 
-## Error Handling
-
-The API returns appropriate HTTP status codes:
-
-- 200: Successful operation
-- 400: Invalid receipt format
-- 404: Receipt not found
-- 500: Server error
-
 ## Environment Variables
 
-The application respects the following environment variables:
+The application uses the following environment variables:
 
 - `NODE_ENV`:
-  - Set to 'test' when running tests (prevents main server from starting)
+  - Set to 'test' when running tests
   - Any other value or unset will start the main server
-- `PORT`: Default is 3000 (main server)
-- Test server runs on port 3001 to avoid conflicts
+- `PORT`: Default is 3000
 
 ## Alternative: Local Development
 
@@ -134,11 +90,11 @@ If you prefer to run the application without Docker, you'll need:
 # Install dependencies
 npm install
 
-# Start the server
+# Run the application
 npm start
 
-# Run tests
-NODE_ENV=test npm test
+# Run the tests
+npm test
 ```
 
 ## Troubleshooting
@@ -148,5 +104,133 @@ NODE_ENV=test npm test
 If you encounter a "Port 3000 is already in use" error, you can check what's using the port:
 
 ```bash
+# Check what's using port 3000
 lsof -i :3000
+
+# Kill the process (replace PID with the number from the lsof command)
+kill -9 <PID>
 ```
+
+You would run:
+
+```bash
+kill -9 1234
+```
+
+## API Usage Examples
+
+Here are some examples of how to use the API with curl:
+
+### Process a Receipt
+
+```bash
+curl -X POST http://localhost:3000/receipts/process \
+  -H "Content-Type: application/json" \
+  -d '{
+    "retailer": "M&M Corner Market",
+    "purchaseDate": "2022-03-20",
+    "purchaseTime": "14:33",
+    "items": [
+      {
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },
+      {
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },
+      {
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },
+      {
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      }
+    ],
+    "total": "9.00"
+  }'
+```
+
+Example Response:
+
+```json
+{
+  "id": "7fb1377b-b223-49d9-a31a-5a02701dd310"
+}
+```
+
+### Get Points for a Receipt
+
+```bash
+curl http://localhost:3000/receipts/7fb1377b-b223-49d9-a31a-5a02701dd310/points
+```
+
+Example Response:
+
+```json
+{
+  "points": 109
+}
+```
+
+### Check API Status
+
+```bash
+curl http://localhost:3000/
+```
+
+Example Response:
+
+```json
+{
+  "message": "Receipt Processor API is running"
+}
+```
+
+## Future Enhancements
+
+Here are some potential improvements that could be made to the application:
+
+1. **Data Persistence**
+
+   - Add a database to store receipts permanently
+   - Implement data backup and recovery
+   - Add data retention policies
+
+2. **API Improvements**
+
+   - Implement rate limiting
+   - Add API versioning
+   - Add more detailed error messages
+
+3. **Security**
+
+   - Add authentication and authorization
+   - Implement API key management
+   - Add CORS configuration
+
+4. **Monitoring & Logging**
+
+   - Add structured logging
+   - Implement metrics collection
+   - Add health check endpoints
+   - Set up monitoring alerts
+
+5. **Performance**
+
+   - Add caching layer
+   - Implement request queuing
+   - Add load balancing support
+   - Optimize point calculation algorithms
+
+6. **Testing**
+
+   - Add performance tests
+   - Set up CI/CD pipeline
+
+7. **Documentation**
+   - Add API documentation with Swagger/OpenAPI
+   - Add more code comments
+   - Create user guides
+   - Add architecture diagrams
