@@ -1,4 +1,3 @@
-
 function validateReceipt(receipt) {
     // Check if all required fields exist
     if (!receipt.retailer || !receipt.purchaseDate || !receipt.purchaseTime || !receipt.items || !receipt.total) {

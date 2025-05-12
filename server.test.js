@@ -4,8 +4,8 @@ import request from 'supertest';
 import { v4 as uuidv4 } from 'uuid';
 
 // Import the functions we want to test
-import { validateReceipt } from './utils/validate-receipt.js';
-import { calculatePoints } from './utils/calculate-points.js';
+import { validateReceipt } from './services/validate-receipt.js';
+import { calculatePoints } from './services/calculate-points.js';
 import app from './server.js';
 
 let server;

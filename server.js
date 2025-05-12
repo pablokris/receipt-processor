@@ -1,7 +1,7 @@
 import express from 'express'
-import { calculatePoints } from './utils/calculate-points.js'
-import { validateReceipt } from './utils/validate-receipt.js'
-import { addReceipt, getReceipt } from './utils/store.js'
+import { calculatePoints } from './services/calculate-points.js'
+import { validateReceipt } from './services/validate-receipt.js'
+import { addReceipt, getReceipt } from './services/store.js'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 import { fileURLToPath } from 'url'
@@ -64,7 +64,7 @@ export default app;
 // Start the server if not being imported for testing
 if (process.env.NODE_ENV !== 'test') {
   const PORT = 3000
-  const HOST = '0.0.0.0'  // Bind to all network interfaces
+  const HOST = 'localhost'  
   const server = app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}`);
   });
