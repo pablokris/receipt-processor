@@ -2,9 +2,20 @@ import express from 'express'
 import { calculatePoints } from './utils/calculate-points.js'
 import { validateReceipt } from './utils/validate-receipt.js'
 import { addReceipt, getReceipt } from './utils/store.js'
+import swaggerUi from 'swagger-ui-express'
+import YAML from 'yamljs'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const swaggerDocument = YAML.load(join(__dirname, 'docs/swagger.yaml'))
 
 const app = express()
 app.use(express.json())
+
+// Swagger documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Add a test route
 app.get('/', (req, res) => {

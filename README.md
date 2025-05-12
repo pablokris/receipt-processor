@@ -117,6 +117,21 @@ You would run:
 kill -9 1234
 ```
 
+## API Documentation
+
+The API documentation is available at `/api-docs` when the server is running. You can access it at:
+
+```
+http://localhost:3000/api-docs
+```
+
+The documentation includes:
+
+- Detailed API endpoints
+- Request/response schemas
+- Example requests and responses
+- Interactive testing interface
+
 ## API Usage Examples
 
 Here are some examples of how to use the API with curl:
@@ -230,7 +245,5 @@ Here are some potential improvements that could be made to the application:
    - Set up CI/CD pipeline
 
 7. **Documentation**
-   - Add API documentation with Swagger/OpenAPI
-   - Add more code comments
    - Create user guides
    - Add architecture diagrams
