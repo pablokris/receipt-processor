@@ -64,7 +64,7 @@ export default app;
 // Start the server if not being imported for testing
 if (process.env.NODE_ENV !== 'test') {
   const PORT = 3000
-  const HOST = 'localhost'  
+  const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
   const server = app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}`);
   });
